@@ -111,7 +111,7 @@ def analyze():
             #print(resp_txt)
         #onece the URL is available, send to AWS Rekognition and print results to stdout
         for faceDetail in rekresp['FaceDetails']:
-            print('The detected face is between ' + str(faceDetail['AgeRange']['Low']) + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
+            print('Facial Analysis: The detected face is between ' + str(faceDetail['AgeRange']['Low']) + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
             Age = (((faceDetail['AgeRange']['Low'])+(faceDetail['AgeRange']['High']))/2)
             #Print Emotion/Gender/Age to stdout
             EmotionalState = max(faceDetail['Emotions'], key=lambda x:x['Confidence'])
@@ -130,11 +130,8 @@ def analyze():
         labels=[]
         n=0
         Objects_Detected = detect_labels(snapshot_url)
-        print(type(Objects_Detected))
         Quantity_Objects = len(Objects_Detected)
         Null = 6 - Quantity_Objects
-        print(Quantity_Objects)
-        print(Null)
         print("Objects_Detected recieved")
         for label in Objects_Detected:
             entry = str("{Name} - {Confidence}%".format(**label))
