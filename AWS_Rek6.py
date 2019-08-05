@@ -152,7 +152,6 @@ def analyze():
             Quantity_Objects = Quantity_Objects + 1
             client.publish(label,entry)
         print("end of objects detected")
-        time.sleep(5)
 # Main function
 if __name__ == '__main__':
     # Get credentials
