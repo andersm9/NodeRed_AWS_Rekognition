@@ -100,7 +100,7 @@ def on_message(client, userdata, msg):
 def analyze():
     #periodially takes snapshot from the Meraki Dashboard and sends to AWS rekognition for analysis
     if True:
-        print(" time has elapsed, taking picture")
+        print("Request Snapshot URL")
         #get the URL of a snapshot from our camera
         snapshot_url = get_meraki_snapshots(session, api_key, net_id, None, None)
         #assume the snapshot is not yet available for download:
@@ -129,7 +129,6 @@ def analyze():
         #Print Object Detection via MQTT to NodeRed
         labels=[]
         n=0
-        print("Objects have been detected")
         Objects_Detected = detect_labels(snapshot_url)
         print(type(Objects_Detected))
         Quantity_Objects = len(Objects_Detected)
@@ -148,7 +147,6 @@ def analyze():
         while Quantity_Objects < 6:
             entry = " - "
             label = ("Label" + str(Quantity_Objects))
-            print(label + " " + entry)
             Quantity_Objects = Quantity_Objects + 1
             client.publish(label,entry)
         print("end of objects detected")
