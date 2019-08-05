@@ -59,7 +59,7 @@ def send_snap_to_AWS(image):
     session = boto3.Session(profile_name='default')
     rek = session.client('rekognition')
     resp = requests.get(image)
-    #print(resp)
+    print(resp)
     rekresp = {}
     resp_txt = str(resp)
     imgbytes = resp.content
