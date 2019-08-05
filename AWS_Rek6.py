@@ -59,7 +59,7 @@ def send_snap_to_AWS(image):
     session = boto3.Session(profile_name='default')
     rek = session.client('rekognition')
     resp = requests.get(image)
-    #print(resp)
+    print(resp)
     rekresp = {}
     resp_txt = str(resp)
     imgbytes = resp.content
@@ -108,7 +108,7 @@ def analyze():
         while ("404" in resp_txt) == True:
             #attempt to access snapshot URL
             rekresp, resp_txt = send_snap_to_AWS(snapshot_url)
-            #print(resp_txt)
+            print(resp_txt)
         #onece the URL is available, send to AWS Rekognition and print results to stdout
         for faceDetail in rekresp['FaceDetails']:
             print('The detected face is between ' + str(faceDetail['AgeRange']['Low']) + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
