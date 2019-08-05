@@ -131,6 +131,11 @@ def analyze():
         n=0
         print("Objects have been detected")
         Objects_Detected = detect_labels(snapshot_url)
+        print(type(Objects_Detected))
+        Quantity_Objects = len(Objects_Detected)
+        Null = 6 - Quantity_Objects
+        print(Quantity_Objects)
+        print(Null)
         print("Objects_Detected recieved")
         for label in Objects_Detected:
             entry = str("{Name} - {Confidence}%".format(**label))
@@ -139,9 +144,13 @@ def analyze():
             print(label + " " + entry)
             client.publish(label,entry)
             n = n+1
-
         client.publish("Snap",snapshot_url)
-        #pause for X seconds
+        while Quantity_Objects < 6:
+            entry = " - "
+            label = ("Label" + str(Quantity_Objects))
+            print(label + " " + entry)
+            Quantity_Objects = Quantity_Objects + 1
+            client.publish(label,entry)
         print("end of objects detected")
         time.sleep(5)
 # Main function
