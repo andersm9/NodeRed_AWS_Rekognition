@@ -166,5 +166,5 @@ if __name__ == '__main__':
     client.user_data_set(user_data)
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect('ec2-54-171-108-150.eu-west-1.compute.amazonaws.com', 1883, 300)
+    client.connect('localhost', 1883, 300)
     client.loop_forever()
