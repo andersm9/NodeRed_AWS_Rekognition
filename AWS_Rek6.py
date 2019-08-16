@@ -8,6 +8,7 @@ import requests
 import boto3
 import json
 import paho.mqtt.client as mqtt
+import math
 
 def get_meraki_snapshots(session, api_key, net_id, time=None, filters=None):
     # Get devices of network
@@ -133,8 +134,11 @@ def analyze():
         Quantity_Objects = len(Objects_Detected)
         Null = 6 - Quantity_Objects
         print("Objects_Detected recieved")
+        #print(Objects_Detected)
         for label in Objects_Detected:
-            entry = str("{Name} - {Confidence}%".format(**label))
+            Truncated_Confidence = str('%.3f' % round((label["Confidence"]),3))
+            object = str("{Name}".format(**label))
+            entry = object + " - " + Truncated_Confidence +" %"
             labels.append(entry)
             label = ("Label" + str(n))
             print(label + " " + entry)
