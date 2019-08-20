@@ -83,6 +83,16 @@ def detect_labels(image, max_labels=10, min_confidence=90):
     #print(str(label_response))
     return label_response['Labels']
 
+#get text
+def detect_TextDetections(image):
+    rekognition = boto3.client("rekognition")
+    resp = requests.get(image)
+    imgbytes = resp.content
+    text_response = rekognition.detect_text(
+        Image={'Bytes': imgbytes},
+    )
+    print(str(text_response))
+    return text_response['TextDetections']
 
 # The callback for when the client receives a CONNACK response from the server
 def on_connect(client, userdata, flags, rc):
