@@ -83,6 +83,16 @@ def detect_labels(image, max_labels=10, min_confidence=90):
     #print(str(label_response))
     return label_response['Labels']
 
+#get text
+def detect_TextDetections(image):
+    rekognition = boto3.client("rekognition")
+    resp = requests.get(image)
+    imgbytes = resp.content
+    text_response = rekognition.detect_text(
+        Image={'Bytes': imgbytes},
+    )
+    print(str(text_response))
+    return text_response['TextDetections']
 
 # The callback for when the client receives a CONNACK response from the server
 def on_connect(client, userdata, flags, rc):
@@ -151,6 +161,32 @@ def analyze():
             Quantity_Objects = Quantity_Objects + 1
             client.publish(label,entry)
         print("end of objects detected")
+
+        #Print Text Detection via MQTT to NodeRed
+        TextDetections=[]
+        n=0
+        Text_Detected = detect_TextDetections(snapshot_url)
+        Quantity_TextDetections = len(TextDetections)
+        Null = 6 - Quantity_TextDetections
+        print("TextDetections recieved")
+        for DetectedText in Text_Detected:
+            Truncated_Confidence = str('%.3f' % round((DetectedText["Confidence"]),3))
+            object = str("{DetectedText}".format(**DetectedText))
+            text_entry = object + " - " + Truncated_Confidence +" %"
+            #text_entry = str("{DetectedText} - {Confidence}%".format(**DetectedText))
+            TextDetections.append(text_entry)
+            DetectedText = ("DetectedText" + str(n))
+            print(DetectedText + " " + text_entry)
+            client.publish(DetectedText,text_entry)
+            n = n+1
+        client.publish("Snap",snapshot_url)
+        while Quantity_TextDetections < 6:
+            text_entry = " - "
+            DetectedText = ("DetectedText" + str(Quantity_TextDetections))
+            Quantity_TextDetections = Quantity_TextDetections + 1
+            client.publish(TextDetection,text_entry)
+        print("end of text detected")
+
 # Main function
 if __name__ == '__main__':
     # Get credentials
